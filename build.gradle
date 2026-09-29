@@ -59,3 +59,16 @@ publishing {
         }
     }
 }
+
+afterEvaluate {
+    publishing {
+        publications {
+            pluginMaven(MavenPublication) {
+                setArtifacts([tasks.named('shadowJar')])
+            }
+        }
+    }
+    tasks.named('generateMetadataFileForPluginMavenPublication') {
+        enabled = false
+    }
+}
