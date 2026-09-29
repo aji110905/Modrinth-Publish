@@ -1,0 +1,61 @@
+plugins {
+    id 'java-gradle-plugin'
+    id 'maven-publish'
+    id 'com.gradleup.shadow' version '9.4.2'
+}
+
+group = 'top.ajitech'
+version = '1.0.0'
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    implementation 'com.google.code.gson:gson:2.11.0'
+    implementation 'com.squareup.okhttp3:okhttp:4.12.0'
+}
+
+tasks.withType(JavaCompile).configureEach {
+    options.encoding = 'UTF-8'
+    options.release = 17
+}
+
+tasks.named('processResources') {
+    filesMatching('**/plugin-version.properties') {
+        expand(pluginVersion: project.version.toString())
+    }
+}
+
+gradlePlugin {
+    plugins {
+        modrinthPublish {
+            id = 'top.ajitech.modrinthpublish'
+            implementationClass = 'top.ajitech.modrinthpublish.ModrinthPublishPlugin'
+            displayName = 'Modrinth Publish'
+            description = 'Publish the Mod to the Modrinth platform via the Create Version API, using Gson and OkHttp.'
+        }
+    }
+}
+
+tasks.named('shadowJar') {
+    archiveClassifier = ''
+}
+tasks.named('jar') {
+    enabled = false
+}
+tasks.named('assemble') {
+    dependsOn tasks.named('shadowJar')
+}
+
+publishing {
+    repositories {
+        maven {
+            url = 'https://maven.ajitech.top/releases'
+            credentials(PasswordCredentials) {
+                username = 'aji'
+                password = System.getenv("AJI_MAVEN_TOKEN_PASSWORD")
+            }
+        }
+    }
+}
