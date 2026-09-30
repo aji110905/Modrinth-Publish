@@ -180,6 +180,15 @@ public class PublishToModrinthTask extends DefaultTask {
         if (artifacts.isEmpty()) {
             throw new GradleException("No file matching the naming rule (" + ParsedArtifact.FILE_NAME_PATTERN + ") was found under path " + directory.getAbsolutePath() + ".");
         }
+
+        // 校验所有文件的 ModVersion 必须一致
+        String modVersion = artifacts.get(0).getModVersion();
+        for (ParsedArtifact artifact : artifacts) {
+            if (!modVersion.equals(artifact.getModVersion())) {
+                throw new GradleException("All files must have the same ModVersion, but found \"" + modVersion + "\" and \"" + artifact.getModVersion() + "\" (file: " + artifact.getFile().getName() + ").");
+            }
+        }
+
         artifacts.sort(Comparator.comparing(ParsedArtifact::getMinecraftVersion));
 
         // 获取所有文件的 Minecraft 版本号并排序
