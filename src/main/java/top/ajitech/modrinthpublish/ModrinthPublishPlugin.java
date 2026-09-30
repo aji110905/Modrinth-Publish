@@ -7,6 +7,7 @@ import org.gradle.api.Project;
 public class ModrinthPublishPlugin implements Plugin<Project> {
     public static final String EXTENSION_NAME = "modrinthPublish";
     public static final String TASK_NAME = "publishToModrinth";
+    public static final String COLLECT_LIBS_TASK_NAME = "collectLibs";
 
     @Override
     public void apply(Project project) {
@@ -33,6 +34,11 @@ public class ModrinthPublishPlugin implements Plugin<Project> {
             task.getFileDirectory().set(project.provider(extension::getFileDirectory));
             task.getMaxMinecraftVersion().set(project.provider(extension::getMaxMinecraftVersion));
             task.getProjectDirectory().set(project.getLayout().getProjectDirectory());
+        });
+
+        project.getTasks().register(COLLECT_LIBS_TASK_NAME, CollectLibsTask.class, task -> {
+            task.setGroup("build");
+            task.setDescription("Moves all files and directories under each subproject's build/libs recursively into the root project's build/libs directory.");
         });
     }
 }
