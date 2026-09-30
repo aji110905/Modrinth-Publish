@@ -36,6 +36,10 @@ public final class ParsedArtifact {
         return file;
     }
 
+    public String getModVersion() {
+        return modVersion;
+    }
+
     public McVersion getMinecraftVersion() {
         return minecraftVersion;
     }
