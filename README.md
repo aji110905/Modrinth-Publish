@@ -111,6 +111,8 @@ modrinthPublish {
 
 ## 使用方法
 
+### 发布到 Modrinth
+
 ```bash
 ./gradlew publishToModrinth
 ```
@@ -123,6 +125,32 @@ modrinthPublish {
 4. 从文件名解析模组标识、模组版本、Minecraft 版本；
 5. 计算每个文件覆盖的游戏版本范围；
 6. 逐文件调用 `POST https://api.modrinth.com/v2/version` 创建版本并上传文件。
+
+### collectLibs
+
+```bash
+./gradlew collectLibs
+```
+
+将每个子项目 `build/libs` 下的所有文件与子目录**移动**到根项目的 `build/libs` 目录，方便后续统一发布。
+
+- 无子项目时直接结束，不做任何操作；
+- 移动前会检查根项目 `build/libs` 下已存在的条目名，若发生**重名冲突**则报错终止，且不会移动任何内容；
+- 移动过程中若失败，会**回滚**已移动的内容，避免目录被部分修改。
+
+### cleanArtifacts
+
+```bash
+./gradlew cleanArtifacts
+```
+
+清理根项目 `build/libs` 目录，仅保留符合命名规则且**模组版本最新**的文件：
+
+1. 删除所有子目录；
+2. 删除不符合文件命名规则的文件；
+3. 在剩余符合命名规则的文件中，仅保留模组版本最新的文件，其余删除。
+
+目录不存在或无符合命名规则的文件时，直接结束并提示，不做任何操作。
 
 ## 文件命名规则
 

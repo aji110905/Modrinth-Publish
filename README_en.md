@@ -111,6 +111,8 @@ modrinthPublish {
 
 ## Usage
 
+### Publish to Modrinth
+
 ```bash
 ./gradlew publishToModrinth
 ```
@@ -123,6 +125,32 @@ Task execution flow:
 4. Parse the mod identifier, mod version, and Minecraft version from each file name;
 5. Compute the game version range covered by each file;
 6. For each file, call `POST https://api.modrinth.com/v2/version` to create the version and upload the file.
+
+### collectLibs
+
+```bash
+./gradlew collectLibs
+```
+
+Moves all files and subdirectories under each subproject's `build/libs` into the root project's `build/libs` directory, so they can later be published together.
+
+- If there are no subprojects, it returns immediately without doing anything;
+- Before moving, it checks the entry names already present under the root `build/libs`; on a **name conflict** it aborts with an error and moves nothing;
+- If a failure occurs during the move, the already-moved entries are **rolled back** so the directory is never left partially modified.
+
+### cleanArtifacts
+
+```bash
+./gradlew cleanArtifacts
+```
+
+Cleans the root project's `build/libs` directory, keeping only files that conform to the naming rule and have the **latest mod version**:
+
+1. Deletes all subdirectories;
+2. Deletes files that do not match the file naming rule;
+3. Among the remaining conforming files, keeps only those with the latest mod version and deletes the rest.
+
+If the directory does not exist or no conforming file remains, it returns with a message and does nothing.
 
 ## File naming rule
 
