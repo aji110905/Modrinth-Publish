@@ -8,6 +8,7 @@ public class ModrinthPublishPlugin implements Plugin<Project> {
     public static final String EXTENSION_NAME = "modrinthPublish";
     public static final String TASK_NAME = "publishToModrinth";
     public static final String COLLECT_LIBS_TASK_NAME = "collectLibs";
+    public static final String CLEAN_ARTIFACTS_TASK_NAME = "cleanArtifacts";
 
     @Override
     public void apply(Project project) {
@@ -39,6 +40,11 @@ public class ModrinthPublishPlugin implements Plugin<Project> {
         project.getTasks().register(COLLECT_LIBS_TASK_NAME, CollectLibsTask.class, task -> {
             task.setGroup("build");
             task.setDescription("Moves all files and directories under each subproject's build/libs recursively into the root project's build/libs directory.");
+        });
+
+        project.getTasks().register(CLEAN_ARTIFACTS_TASK_NAME, CleanArtifactsTask.class, task -> {
+            task.setGroup("build");
+            task.setDescription("Deletes all subdirectories and non-conforming files under the root project's build/libs, and among the remaining files keeps only those with the latest mod version.");
         });
     }
 }
