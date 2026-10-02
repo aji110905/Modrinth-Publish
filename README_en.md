@@ -185,7 +185,7 @@ For each version V in the sorted list:
   If no next version (the last one): upper bound = maxMinecraftVersion (the latest release fetched in real time when unset), range = [V, upper bound]
 ```
 
-Assume the directory contains seven files: `1.21`, `1.21.5`, `1.21.6`, `1.21.11`, `26.1`, `26.1.2`, `26.3`, with `maxMinecraftVersion` set to `26.4`:
+Assume the directory contains seven files: `1.21`, `1.21.5`, `1.21.6`, `1.21.11`, `26.1`, `26.1.2`, `26.3`, not configured `maxMinecraftVersion`:
 
 | Current version | Next version | Upper bound | Covered range |
 |---|---|---|---|
